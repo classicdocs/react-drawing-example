@@ -1,0 +1,2 @@
+export const NORMAL_MODE = "NORMAL_MODE";
+export const CENTRALIZED_MODE = "CENTRALIZED_MODE";
