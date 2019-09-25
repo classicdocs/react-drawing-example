@@ -9,8 +9,12 @@ import Line from "./Line";
 export class ImportFile extends Component {
   inputOnChange = e => {
     const file = e.target.files[0];
-    if (file !== "") {
-      this.upload(file);
+    if (file !== "" && file !== undefined) {
+      if (file.name.split(".")[1] === "json") {
+        this.upload(file);
+      } else {
+        alert("Wrong file type. Choose .json");
+      }
     }
   };
 
@@ -21,49 +25,49 @@ export class ImportFile extends Component {
     importedShapes.forEach(item => {
       const ref = React.createRef();
       let data = {};
-      if (item.hasOwnProperty("points")) {
+      if (item.type === "Polygon") {
         // Polygon
         data = {
           ref: ref,
           shape: (
             <Polygon
               ref={ref}
-              points={item.points}
-              strokeWidth={item.strokeWidth}
-              strokeColor={item.strokeColor}
-              selectedColor={item.selectedColor}
+              points={item.data.points}
+              strokeWidth={item.data.strokeWidth}
+              strokeColor={item.data.strokeColor}
+              selectedColor={item.data.selectedColor}
             />
           )
         };
-      } else if (item.hasOwnProperty("r")) {
+      } else if (item.type === "Circle") {
         // circle
         data = {
           ref: ref,
           shape: (
             <Circle
-              r={item.r}
+              r={item.data.r}
               ref={ref}
-              cx={item.cx}
-              cy={item.cy}
-              fill={item.fill}
-              strokeWidth={item.strokeWidth}
-              strokeColor={item.strokeColor}
-              selectedColor={item.selectedColor}
+              cx={item.data.cx}
+              cy={item.data.cy}
+              fill={item.data.fill}
+              strokeWidth={item.data.strokeWidth}
+              strokeColor={item.data.strokeColor}
+              selectedColor={item.data.selectedColor}
             />
           )
         };
-      } else {
+      } else if (item.type === "Line") {
         // line
         data = {
           ref: ref,
           shape: (
             <Line
               ref={ref}
-              point1={item.point1}
-              point2={item.point2}
-              strokeWidth={item.strokeWidth}
-              strokeColor={item.strokeColor}
-              selectedColor={item.selectedColor}
+              point1={item.data.point1}
+              point2={item.data.point2}
+              strokeWidth={item.data.strokeWidth}
+              strokeColor={item.data.strokeColor}
+              selectedColor={item.data.selectedColor}
             />
           )
         };

@@ -10,8 +10,17 @@ export class ExportFile extends Component {
 
     let shapes = [];
     this.props.shapes.forEach(item => {
-      shapes.push(item.shape.props);
+      const shape = {
+        data: item.shape.props,
+        type: item.shape.type.name
+      };
+      shapes.push(shape);
     });
+
+    if (shapes.length === 0) {
+      alert("There is no shapes to export!");
+      return;
+    }
 
     const json = JSON.stringify(shapes);
     const blob = new Blob([json], { type: "octet/stream" });

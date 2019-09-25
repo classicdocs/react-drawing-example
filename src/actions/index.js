@@ -5,7 +5,8 @@ import {
   CREATE_SHAPES,
   SELECT_SHAPE,
   UPDATE_SHAPE,
-  UNSELECT_SHAPES
+  UNSELECT_SHAPES,
+  DELETE_SELECTED_SHAPES
 } from "./types";
 
 export const createShape = shape => {
@@ -52,5 +53,11 @@ export const selectTool = tool => {
 export const switchMode = () => {
   return {
     type: SWITCH_MODE
+  };
+};
+
+export const deleteSelectedShapes = () => {
+  return {
+    type: DELETE_SELECTED_SHAPES
   };
 };

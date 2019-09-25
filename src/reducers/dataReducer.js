@@ -3,7 +3,8 @@ import {
   CREATE_SHAPES,
   SELECT_SHAPE,
   UPDATE_SHAPE,
-  UNSELECT_SHAPES
+  UNSELECT_SHAPES,
+  DELETE_SELECTED_SHAPES
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -78,6 +79,13 @@ export default (state = INITIAL_STATE, action) => {
             }
           };
         })
+      };
+    }
+    case DELETE_SELECTED_SHAPES: {
+      return {
+        ...state,
+        shapes: state.shapes.filter(el => el.shape.props.selected !== true),
+        selectedShapes: []
       };
     }
     default:

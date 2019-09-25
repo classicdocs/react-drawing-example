@@ -15,8 +15,7 @@ import ToolTypes from "../reducers/toolTypes";
 import Circle from "./Circle";
 import { CENTRALIZED_MODE } from "../reducers/switchTypes";
 import { isEqualCentralized } from "../models/Point";
-
-import Triangle from "./Triangle";
+import Delete from "./Delete";
 
 class App extends Component {
   state = {
@@ -198,6 +197,7 @@ class App extends Component {
           strokeWidth="5"
           strokeColor="grey"
           selectedColor="red"
+          resizePoints={[]}
         />
       )
     };
@@ -521,55 +521,58 @@ class App extends Component {
 
   render() {
     return (
-      <Grid container onKeyDown={this.onKeyDown}>
-        <Grid item lg={1} md={1} sm={1} xs={12}>
-          <Toolbar onToolChange={this.onToolChange} />
+      <div>
+        <Delete />
+        <Grid container onKeyDown={this.onKeyDown}>
+          <Grid item lg={1} md={1} sm={1} xs={12}>
+            <Toolbar onToolChange={this.onToolChange} />
+          </Grid>
+          <Grid item lg={11} md={11} sm={11} xs={12}>
+            <svg
+              id="svg"
+              onClick={this.registerClick}
+              onMouseMove={this.registerMove}
+              onContextMenu={this.registerRightClick}
+              onMouseDown={this.onMouseDown}
+              onMouseUp={this.onMouseUp}
+            >
+              <defs>
+                <pattern
+                  id="smallGrid"
+                  width="10"
+                  height="10"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <path
+                    d="M 10 0 L 0 0 0 10"
+                    fill="none"
+                    stroke="gray"
+                    strokeWidth="0.5"
+                  />
+                </pattern>
+                <pattern
+                  id="grid"
+                  width="100"
+                  height="100"
+                  patternUnits="userSpaceOnUse"
+                >
+                  <rect width="100" height="100" fill="url(#smallGrid)" />
+                  <path
+                    d="M 100 0 L 0 0 0 100"
+                    fill="none"
+                    stroke="gray"
+                    strokeWidth="1"
+                  />
+                </pattern>
+              </defs>
+              <rect width="100%" height="100%" fill="url(#grid)" />
+              {this.renderDrawingLine()}
+              {this.renderShapes()}
+              {this.renderLines()}
+            </svg>
+          </Grid>
         </Grid>
-        <Grid item lg={11} md={11} sm={11} xs={12}>
-          <svg
-            id="svg"
-            onClick={this.registerClick}
-            onMouseMove={this.registerMove}
-            onContextMenu={this.registerRightClick}
-            onMouseDown={this.onMouseDown}
-            onMouseUp={this.onMouseUp}
-          >
-            <defs>
-              <pattern
-                id="smallGrid"
-                width="10"
-                height="10"
-                patternUnits="userSpaceOnUse"
-              >
-                <path
-                  d="M 10 0 L 0 0 0 10"
-                  fill="none"
-                  stroke="gray"
-                  strokeWidth="0.5"
-                />
-              </pattern>
-              <pattern
-                id="grid"
-                width="100"
-                height="100"
-                patternUnits="userSpaceOnUse"
-              >
-                <rect width="100" height="100" fill="url(#smallGrid)" />
-                <path
-                  d="M 100 0 L 0 0 0 100"
-                  fill="none"
-                  stroke="gray"
-                  strokeWidth="1"
-                />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grid)" />
-            {this.renderDrawingLine()}
-            {this.renderShapes()}
-            {this.renderLines()}
-          </svg>
-        </Grid>
-      </Grid>
+      </div>
     );
   }
 }
