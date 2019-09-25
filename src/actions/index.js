@@ -2,6 +2,7 @@ import {
   SELECT_TOOL,
   SWITCH_MODE,
   CREATE_SHAPE,
+  CREATE_SHAPES,
   SELECT_SHAPE,
   UPDATE_SHAPE,
   UNSELECT_SHAPES
@@ -11,6 +12,13 @@ export const createShape = shape => {
   return {
     type: CREATE_SHAPE,
     payload: shape
+  };
+};
+
+export const createShapes = shapes => {
+  return {
+    type: CREATE_SHAPES,
+    payload: shapes
   };
 };
 

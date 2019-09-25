@@ -11,13 +11,11 @@ import {
   unselectShapes
 } from "../actions/index";
 import Toolbar from "./Toolbar";
-
 import ToolTypes from "../reducers/toolTypes";
 import Circle from "./Circle";
 import { CENTRALIZED_MODE } from "../reducers/switchTypes";
 import { isEqualCentralized } from "../models/Point";
 
-import _ from "lodash";
 import Triangle from "./Triangle";
 
 class App extends Component {
@@ -64,6 +62,7 @@ class App extends Component {
       }
       case ToolTypes.ROTATE_RIGHT: {
         this.rotate("right");
+        break;
       }
       default:
         return;
@@ -171,20 +170,13 @@ class App extends Component {
         if (length >= 3) {
           const firstPoint = this.state.lines[0].shape.props.point2;
 
-          console.log(point1, firstPoint);
           if (isEqualCentralized(point1, firstPoint)) {
             let points = [];
             this.state.lines.forEach(line => {
               points.push(line.shape.props.point2);
             });
-            let data;
-            if (length === 3) {
-              // create triangle
-              data = this.createTriangle(points);
-            } else {
-              // create polygon
-              data = this.createPolygon(points);
-            }
+            let data = this.createPolygon(points);
+
             this.props.createShape(data);
 
             this.setState({ lines: [] }, () => this.resetState());
@@ -201,25 +193,6 @@ class App extends Component {
       ref: ref,
       shape: (
         <Polygon
-          ref={ref}
-          points={points}
-          strokeWidth="5"
-          strokeColor="grey"
-          selectedColor="red"
-        />
-      )
-    };
-
-    return data;
-  }
-
-  createTriangle(points) {
-    let ref = React.createRef();
-
-    let data = {
-      ref: ref,
-      shape: (
-        <Triangle
           ref={ref}
           points={points}
           strokeWidth="5"

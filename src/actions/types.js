@@ -1,4 +1,5 @@
 export const CREATE_SHAPE = "CREATE_SHAPE";
+export const CREATE_SHAPES = "CREATE_SHAPES";
 export const UPDATE_SHAPE = "UPDATE_SHAPE";
 export const SELECT_SHAPE = "SELECT_SHAPE";
 export const UNSELECT_SHAPES = "UNSELECT_SHAPES";

@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { IconButton, Grid, Icon } from "@material-ui/core";
+import { IconButton, Grid } from "@material-ui/core";
 import { selectTool, switchMode } from "../actions";
-
+import ImportFile from "./ImportFile";
+import ExportFile from "./ExportFile";
 import ToolTypes from "../reducers/toolTypes";
 
 import {
@@ -114,6 +115,10 @@ class Toolbar extends Component {
           >
             <RotateRight />
           </IconButton>
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <ImportFile />
+          <ExportFile />
         </Grid>
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
           <div style={{ position: "absolute", bottom: "0" }}>

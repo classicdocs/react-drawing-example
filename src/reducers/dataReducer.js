@@ -1,5 +1,6 @@
 import {
   CREATE_SHAPE,
+  CREATE_SHAPES,
   SELECT_SHAPE,
   UPDATE_SHAPE,
   UNSELECT_SHAPES
@@ -14,6 +15,9 @@ export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case CREATE_SHAPE: {
       return { ...state, shapes: [...state.shapes, action.payload] };
+    }
+    case CREATE_SHAPES: {
+      return { ...state, shapes: action.payload };
     }
     case UPDATE_SHAPE: {
       return {
