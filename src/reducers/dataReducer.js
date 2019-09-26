@@ -4,7 +4,8 @@ import {
   SELECT_SHAPE,
   UPDATE_SHAPE,
   UNSELECT_SHAPES,
-  DELETE_SELECTED_SHAPES
+  DELETE_SELECTED_SHAPES,
+  DELETE_SHAPE
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -86,6 +87,12 @@ export default (state = INITIAL_STATE, action) => {
         ...state,
         shapes: state.shapes.filter(el => el.shape.props.selected !== true),
         selectedShapes: []
+      };
+    }
+    case DELETE_SHAPE: {
+      return {
+        ...state,
+        shapes: state.shapes.filter(el => el.ref !== action.payload.ref)
       };
     }
     default:

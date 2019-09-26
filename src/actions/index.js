@@ -6,7 +6,8 @@ import {
   SELECT_SHAPE,
   UPDATE_SHAPE,
   UNSELECT_SHAPES,
-  DELETE_SELECTED_SHAPES
+  DELETE_SELECTED_SHAPES,
+  DELETE_SHAPE
 } from "./types";
 
 export const createShape = shape => {
@@ -59,5 +60,12 @@ export const switchMode = () => {
 export const deleteSelectedShapes = () => {
   return {
     type: DELETE_SELECTED_SHAPES
+  };
+};
+
+export const deleteShape = shape => {
+  return {
+    type: DELETE_SHAPE,
+    payload: shape
   };
 };

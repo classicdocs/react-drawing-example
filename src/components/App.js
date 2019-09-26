@@ -8,7 +8,8 @@ import {
   createShape,
   selectShape,
   updateShape,
-  unselectShapes
+  unselectShapes,
+  deleteShape
 } from "../actions/index";
 import Toolbar from "./Toolbar";
 import ToolTypes from "../reducers/toolTypes";
@@ -16,6 +17,7 @@ import Circle from "./Circle";
 import { CENTRALIZED_MODE } from "../reducers/switchTypes";
 import { isEqualCentralized } from "../models/Point";
 import Delete from "./Delete";
+import { splitPolygon } from "../util/splitPolygon";
 
 class App extends Component {
   state = {
@@ -130,8 +132,45 @@ class App extends Component {
     return { x, y };
   }
 
+  checkForSplitPolygon(point2) {
+    let shapeToDelete = null;
+    this.props.shapes.forEach(item => {
+      if (item.shape.type.name === "Polygon") {
+        // const line = {
+        //   point1: this.state.line.lastPoint,
+        //   point2: this.state.line.newPoint
+        // };
+        const line = {
+          point1: this.state.line.lastPoint,
+          point2
+        };
+
+        const result = splitPolygon(item.shape.props, line);
+
+        if (result === null) {
+          return;
+        }
+
+        const data1 = this.createPolygon(result.leftPolygonPoints);
+        const data2 = this.createPolygon(result.rightPolygonPoints);
+        this.props.createShape(data1);
+        this.props.createShape(data2);
+
+        shapeToDelete = item;
+      }
+    });
+
+    if (shapeToDelete) {
+      this.props.deleteShape(shapeToDelete);
+      this.resetState();
+      return true;
+    }
+    return false;
+  }
+
   createLine(e) {
     const point1 = this.getCoordinates(e);
+
     if (this.state.line.lastPoint === null) {
       this.setState({ line: { ...this.state.line, lastPoint: point1 } });
       return;
@@ -139,9 +178,11 @@ class App extends Component {
 
     const point2 = this.state.line.lastPoint;
 
-    this.setState({ line: { ...this.state.line, lastPoint: point1 } });
+    if (this.checkForSplitPolygon(point1)) {
+      return;
+    }
 
-    console.log(this.state.lines.length);
+    this.setState({ line: { ...this.state.line, lastPoint: point1 } });
 
     let ref = React.createRef();
 
@@ -588,5 +629,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { createShape, selectShape, updateShape, unselectShapes }
+  { createShape, selectShape, updateShape, unselectShapes, deleteShape }
 )(App);

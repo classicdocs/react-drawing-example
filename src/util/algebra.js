@@ -10,7 +10,7 @@ export const getPointsNormalToLine = line => {
     lineEquation = getLineEquationFromTwoPoints(line.point1, line.point2); // y-y1 = ((y2-y1)/(x2-x1)) * (x-x1)
   }
 
-  const { A, B } = getAB(lineEquation);
+  const { A, B } = getAB(lineEquation.toString());
 
   let point1, point2, point3, point4;
   let normalLine1, normalLine2;
@@ -75,7 +75,7 @@ export const getResizeCentralPoint = (line, centralPoint, newPoint) => {
     lineEquation = getLineEquationFromTwoPoints(line.point1, line.point2); // y-y1 = ((y2-y1)/(x2-x1)) * (x-x1)
   }
 
-  let params = getAB(lineEquation);
+  let params = getAB(lineEquation.toString());
 
   let normalLine;
   if (line.point1.y === line.point2.y) {
@@ -129,12 +129,19 @@ const getResizePointIntersectionEqualsX = (normalLine, normalLine2) => {
   return { x: normalLine2.solveFor("x"), y: normalLine.solveFor("y") };
 };
 
-const getLineEquationFromTwoPoints = (point1, point2) => {
+export const getLineEquationFromTwoPoints = (point1, point2) => {
   // Equation of a Line from 2 Points
   // return y-y1 = ((y2-y1)/(x2-x1)) * (x-x1)
 
-  const [x1, y1] = [point1.x, point1.y];
-  const [x2, y2] = [point2.x, point2.y];
+  // round to 2 decimals
+  const [x1, y1] = [
+    Math.round(point1.x * 100) / 100,
+    Math.round(point1.y * 100) / 100
+  ];
+  const [x2, y2] = [
+    Math.round(point2.x * 100) / 100,
+    Math.round(point2.y * 100) / 100
+  ];
 
   const k = Math.round(((y2 - y1) / (x2 - x1)) * 100) / 100; // k = (y2-y1)/(x2-x1)
 
@@ -142,12 +149,12 @@ const getLineEquationFromTwoPoints = (point1, point2) => {
   let expr2 = algebra.parse(`${k} * (x - ${x1})`);
   const eq = new Equation(expr1, expr2);
 
-  return eq.toString();
+  return eq;
 };
 
-const getLineEquationFromTwoPointsEqualsX = x => {
+export const getLineEquationFromTwoPointsEqualsX = x => {
   // return 0 = -x + n
-  return new Equation(new Expression(0), algebra.parse(`-x + ${x}`)).toString();
+  return new Equation(new Expression(0), algebra.parse(`-x + ${x}`));
 };
 
 const getAB = line => {
@@ -211,7 +218,7 @@ const getCircleFromX = (cx, cy, r, x) => {
   return eq;
 };
 
-const parseFraction = fraction => {
+export const parseFraction = fraction => {
   if (typeof fraction != "object") {
     return fraction;
   }

@@ -49,6 +49,9 @@ class Polygon extends Shape {
         resizePoints: this.calculateResizePoints(this.state.points)
       });
     } else if (resizePoints !== undefined) {
+      if (resizePoints.length === 0) {
+        resizePoints = this.calculateResizePoints(this.state.points);
+      }
       this.setState({ resizePoints });
     }
 

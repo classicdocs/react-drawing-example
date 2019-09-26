@@ -17,7 +17,7 @@ class Delete extends Component {
   };
 
   render() {
-    return <div style={{ display: "none" }}></div>;
+    return null;
   }
 }
 
