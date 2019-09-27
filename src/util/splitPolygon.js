@@ -5,6 +5,7 @@ import {
   parseFraction
 } from "../util/algebra";
 import { isEqual } from "../models/Point";
+import { LinkedList } from "./linkedList";
 
 export const splitPolygon = (polygon, line) => {
   const points = getPoints(polygon, line);
@@ -23,9 +24,6 @@ export const splitPolygon = (polygon, line) => {
   console.log(rightPolygonPoints);
 
   return { leftPolygonPoints, rightPolygonPoints };
-
-  // need to delete polygon from store
-  // need to add new poligones to
 };
 
 const createLeftAndRightSide = (polygon, line, points) => {
@@ -37,9 +35,9 @@ const createLeftAndRightSide = (polygon, line, points) => {
 
   for (let i = 0; i < polygon.points.length; i++) {
     if (isEqual(polygon.points[i], points.leftPoint1)) {
-      startIndLeft = i;
-    } else if (isEqual(polygon.points[i], points.leftPoint2)) {
       endIndLeft = i;
+    } else if (isEqual(polygon.points[i], points.leftPoint2)) {
+      startIndLeft = i;
     }
     if (isEqual(polygon.points[i], points.rightPoint1)) {
       startIndRight = i;
@@ -48,40 +46,22 @@ const createLeftAndRightSide = (polygon, line, points) => {
     }
   }
 
-  // FIXME
-  if (startIndLeft > endIndLeft) {
-    const tempStart = startIndLeft;
-    const tempEnd = endIndLeft;
-    startIndLeft = endIndRight;
-    endIndLeft = startIndRight;
-    endIndRight = tempStart;
-    startIndRight = tempEnd;
-
-    const p1 = line.point1;
-    line.point1 = line.point2;
-    line.point2 = p1;
-  }
-
   console.log(startIndLeft, endIndLeft);
   console.log(startIndRight, endIndRight);
 
-  for (let i = 0; i < polygon.points.length; i++) {
-    leftPolygonPoints.push(polygon.points[i]);
-    if (i === startIndLeft) {
-      leftPolygonPoints.push(line.point1);
-      leftPolygonPoints.push(line.point2);
-      break;
-    }
-  }
-
-  for (let i = endIndLeft; i < polygon.points.length; i++) {
-    leftPolygonPoints.push(polygon.points[i]);
-  }
+  leftPolygonPoints.push(line.point2);
+  const linkedList = new LinkedList(polygon.points);
+  let list = linkedList.getPoints(startIndLeft, endIndLeft);
+  list.forEach(l => {
+    leftPolygonPoints.push(l);
+  });
+  leftPolygonPoints.push(line.point1);
 
   rightPolygonPoints.push(line.point1);
-  for (let i = startIndRight; i <= endIndRight; i++) {
-    rightPolygonPoints.push(polygon.points[i]);
-  }
+  list = linkedList.getPoints(startIndRight, endIndRight);
+  list.forEach(l => {
+    rightPolygonPoints.push(l);
+  });
   rightPolygonPoints.push(line.point2);
 
   return { leftPolygonPoints, rightPolygonPoints };
